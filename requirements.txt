@@ -1,10 +1,27 @@
-streamlit
-google-genai
+# --- Base ---
+streamlit>=1.40.0
 python-dotenv
-llama-index
-llama-index-llms-google-genai
-llama-index-embeddings-google
-llama-index-readers-google
-llama-index-vector-stores-chroma
-chromadb
-pydrive
+chromadb>=0.5.15
+
+# --- LlamaIndex core (versioni compatibili con Python 3.12+) ---
+llama-index==0.10.56
+llama-index-core==0.10.56
+
+# --- LLM connectors ---
+llama-index-llms-openai==0.2.11
+llama-index-llms-ollama==0.2.2
+
+# --- Embedding models ---
+llama-index-embeddings-huggingface==0.2.5
+
+# --- Lettura da Google Drive ---
+llama-index-readers-google==0.2.9
+google-auth>=2.33.0
+google-auth-oauthlib>=1.2.1
+google-api-python-client>=2.146.0
+
+# --- Vector store ---
+llama-index-vector-stores-chroma==0.2.5
+
+# --- Extra opzionale ---
+pydrive==1.3.1
