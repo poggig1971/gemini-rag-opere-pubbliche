@@ -4,6 +4,10 @@ import json
 import tempfile
 from dotenv import load_dotenv
 import chromadb
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+from googleapiclient.http import MediaIoBaseDownload
+import io
 
 # --- Config Streamlit ---
 st.set_page_config(page_title="🏗️ Agente Opere Pubbliche RAG", page_icon="🏗️")
@@ -14,19 +18,18 @@ load_dotenv()
 # --- Variabili ambiente ---
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_CREDS = os.getenv("GOOGLE_CREDENTIALS_JSON")
-FOLDER_ID = "1-TRQN_5hpCYkI7P1wmDAUCfBdKQ-Dk16"  # <-- il tuo ID cartella
+FOLDER_ID = "1-TRQN_5hpCYkI7P1wmDAUCfBdKQ-Dk16"  # <-- ID cartella Drive
 
 st.markdown("### 🔐 Verifica chiavi API")
 st.write("✅ OPENAI_API_KEY:", bool(OPENAI_KEY))
 st.write("✅ GOOGLE_CREDENTIALS_JSON:", bool(GOOGLE_CREDS))
 
-# --- Import LlamaIndex (nuova sintassi >= 0.11.x) ---
+# --- Import LlamaIndex ---
 try:
-    from llama_index.core import VectorStoreIndex, StorageContext
+    from llama_index.core import VectorStoreIndex, StorageContext, Document
     from llama_index.llms.openai import OpenAI
     from llama_index.embeddings.huggingface import HuggingFaceEmbedding
     from llama_index.vector_stores.chroma import ChromaVectorStore
-    from llama_index.readers.google_drive import GoogleDriveReader
 except Exception as e:
     st.error(f"❌ Errore di import: {e}")
     st.stop()
@@ -35,6 +38,36 @@ except Exception as e:
 llm = OpenAI(model="gpt-4o-mini", api_key=OPENAI_KEY)
 embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
+# --- Funzione: scarica file da Google Drive ---
+def scarica_file_drive(folder_id, creds_json):
+    """Scarica i file di testo/PDF dal Drive e restituisce (nome, contenuto)"""
+    creds = service_account.Credentials.from_service_account_info(creds_json)
+    service = build('drive', 'v3', credentials=creds)
+
+    results = service.files().list(
+        q=f"'{folder_id}' in parents and mimeType != 'application/vnd.google-apps.folder'",
+        fields="files(id, name, mimeType)"
+    ).execute()
+
+    files = results.get('files', [])
+    docs = []
+
+    for f in files:
+        st.write(f"📄 Scarico: {f['name']}")
+        request = service.files().get_media(fileId=f['id'])
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, request)
+        done = False
+        while not done:
+            _, done = downloader.next_chunk()
+        fh.seek(0)
+        try:
+            content = fh.read().decode("utf-8", errors="ignore")
+        except Exception:
+            content = f"[File binario: {f['name']}]"
+        docs.append(Document(text=content, metadata={"name": f["name"]}))
+    return docs
+
 # --- Funzione: carica e indicizza file da Google Drive ---
 @st.cache_resource
 def load_and_index_drive_files(folder_id):
@@ -42,14 +75,10 @@ def load_and_index_drive_files(folder_id):
         st.error("❌ Variabile 'GOOGLE_CREDENTIALS_JSON' mancante nei secrets.")
         return None
 
-    with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as tmp:
-        tmp.write(GOOGLE_CREDS)
-        cred_path = tmp.name
-
     try:
+        creds_json = json.loads(GOOGLE_CREDS)
         st.info("🔐 Connessione a Google Drive...")
-        loader = GoogleDriveReader(folder_id=folder_id, service_account_key=cred_path)
-        documents = loader.load_data()
+        documents = scarica_file_drive(folder_id, creds_json)
 
         if not documents:
             st.warning("⚠️ Nessun documento trovato nella cartella specificata.")
@@ -74,8 +103,6 @@ def load_and_index_drive_files(folder_id):
     except Exception as e:
         st.error(f"Errore durante l'accesso o l'indicizzazione: {e}")
         return None
-    finally:
-        os.remove(cred_path)
 
 # --- Pulizia database locale ---
 def cleanup_local_db():
@@ -130,3 +157,4 @@ if st.session_state.get("rag_ready"):
                     st.markdown(str(response))
                 except Exception as e:
                     st.error(f"Errore: {e}")
+
