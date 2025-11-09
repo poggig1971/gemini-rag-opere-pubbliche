@@ -2,3 +2,8 @@
 streamlit
 google-genai
 python-dotenv
+# Nuove dipendenze per LlamaIndex e Google Drive
+llama-index
+llama-index-llms-google-genai
+llama-index-readers-google
+pydrive # Per l'autenticazione Drive
