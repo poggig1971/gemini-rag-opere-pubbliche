@@ -1,24 +1,24 @@
 # --- Base ---
-streamlit>=1.40.0
+streamlit==1.40.0
 python-dotenv
-chromadb>=0.5.15
+chromadb==0.5.15
 
-# --- LlamaIndex core (versioni stabili compatibili con Python 3.12+) ---
-llama-index==0.10.56
-llama-index-core==0.10.56
+# --- Core LlamaIndex (compatibile Python 3.12) ---
+llama-index==0.10.64
+llama-index-core==0.10.64
 
-# --- LLM connectors (OpenAI + Ollama) ---
-llama-index-llms-openai==0.2.11
+# --- LLM connectors ---
+llama-index-llms-openai==0.2.15
 llama-index-llms-ollama==0.2.2
 
 # --- Embedding model gratuito ---
-llama-index-embeddings-huggingface==0.2.5
+llama-index-embeddings-huggingface==0.2.8
 
 # --- Lettura da Google Drive ---
 llama-index-readers-google==0.2.9
-google-auth>=2.33.0
-google-auth-oauthlib>=1.2.1
-google-api-python-client>=2.146.0
+google-auth==2.33.0
+google-auth-oauthlib==1.2.1
+google-api-python-client==2.147.0
 
 # --- Vector store ---
 llama-index-vector-stores-chroma==0.2.5
