@@ -2,13 +2,13 @@ streamlit==1.40.0
 python-dotenv
 chromadb==0.5.15
 
-# --- LlamaIndex stack pienamente compatibile ---
-llama-index==0.11.21
-llama-index-core==0.11.21
-llama-index-llms-openai==0.2.10
-llama-index-embeddings-huggingface==0.4.0
+# --- Stack LlamaIndex 0.12.x (compatibile con Python 3.13) ---
+llama-index==0.12.12
+llama-index-core==0.12.12
+llama-index-llms-openai==0.3.6
+llama-index-embeddings-huggingface==0.6.1
 llama-index-readers-google==0.3.1
-llama-index-vector-stores-chroma==0.4.2
+llama-index-vector-stores-chroma==0.5.2
 
 # --- Librerie Google ---
 google-auth==2.33.0
