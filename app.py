@@ -135,6 +135,23 @@ with st.sidebar:
             st.success("🗑️ Indice locale eliminato — ricarica la pagina.")
         else:
             st.info("Nessun indice locale trovato.")
+   
+    # --- Diagnostica Secrets ---
+    st.markdown("---")
+    st.header("🧪 Verifica Secrets (solo diagnostica interna)")
+    if st.button("Verifica variabili ambiente"):
+        secrets = {
+            "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+            "GOOGLE_CREDENTIALS_JSON": os.getenv("GOOGLE_CREDENTIALS_JSON"),
+        }
+
+        for name, value in secrets.items():
+            if value:
+                st.success(f"✅ {name}: trovata ({len(value)} caratteri, nascosta per sicurezza)")
+            else:
+                st.error(f"❌ {name}: non trovata")
+
+        st.caption("Le variabili vengono lette dai Secrets di Codespaces o Streamlit Cloud.")
 
 # --- Area Chat ---
 if st.session_state["rag_ready"] and st.session_state["query_engine"]:
