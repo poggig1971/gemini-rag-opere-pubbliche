@@ -2,17 +2,16 @@ streamlit==1.40.0
 python-dotenv
 chromadb==0.5.15
 
-# Versioni perfettamente compatibili tra loro
+# --- LlamaIndex stack pienamente compatibile ---
 llama-index==0.11.21
 llama-index-core==0.11.21
 llama-index-llms-openai==0.2.10
-llama-index-embeddings-huggingface==0.6.1
+llama-index-embeddings-huggingface==0.4.0
 llama-index-readers-google==0.3.1
 llama-index-vector-stores-chroma==0.4.2
 
-# Librerie Google
+# --- Librerie Google ---
 google-auth==2.33.0
 google-auth-oauthlib==1.2.1
 google-api-python-client==2.147.0
 pydrive==1.3.1
-
