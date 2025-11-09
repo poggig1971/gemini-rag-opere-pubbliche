@@ -4,6 +4,11 @@ import json
 import tempfile
 from dotenv import load_dotenv
 
+
+st.title("🔐 Test Secrets")
+st.write("✅ OPENAI_API_KEY:", bool(os.getenv("OPENAI_API_KEY")))
+st.write("✅ GOOGLE_CREDENTIALS_JSON:", bool(os.getenv("GOOGLE_CREDENTIALS_JSON")))
+
 # --- Import principali per LlamaIndex e Google Drive ---
 try:
     from llama_index.readers.google import GoogleDriveReader
