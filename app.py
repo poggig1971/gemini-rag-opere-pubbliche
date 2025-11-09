@@ -38,7 +38,7 @@ Settings.embed_model = GoogleEmbedding(model_name="models/text-embedding-004", a
 
 # ID della cartella RAG OOPP (inserisci l'ID qui)
 # L'ID si trova nell'URL di Drive dopo /folders/
-FOLDER_ID = "IL_TUO_ID_CARTELLA_DRIVE_QUI" # <--- INSERISCI QUI L'ID DELLA TUA CARTELLA
+FOLDER_ID = "1-TRQN_5hpCYkI7P1wmDAUCfBdKQ-Dk16" # <--- INSERISCI QUI L'ID DELLA TUA CARTELLA
 
 # --- Funzioni del Client Gemini (Rimosso File Search Tool, introdotto LlamaIndex) ---
 
