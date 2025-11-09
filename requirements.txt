@@ -3,15 +3,15 @@ streamlit>=1.40.0
 python-dotenv
 chromadb>=0.5.15
 
-# --- LlamaIndex core (versioni compatibili con Python 3.12+) ---
+# --- LlamaIndex core (versioni stabili compatibili con Python 3.12+) ---
 llama-index==0.10.56
 llama-index-core==0.10.56
 
-# --- LLM connectors ---
+# --- LLM connectors (OpenAI + Ollama) ---
 llama-index-llms-openai==0.2.11
 llama-index-llms-ollama==0.2.2
 
-# --- Embedding models ---
+# --- Embedding model gratuito ---
 llama-index-embeddings-huggingface==0.2.5
 
 # --- Lettura da Google Drive ---
